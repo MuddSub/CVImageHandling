@@ -14,13 +14,14 @@
             Please log in with your HMC email so that we can verify your identity. 
 
         </p>
-        <form>
-            <label for="email">HMC email:</label><br>
-            <input type="text" id="email" name="email"> @hmc.edu<br>
+        <form action="login.inc.php" method="post">
+            <label for="uid">HMC email:</label><br>
+            <input type="text" id="uid" name="email"> @hmc.edu<br>
             <input type="submit" value="Submit">
             <!-- where does the input data get submitted to...? -->
         </form>
 
+        <script src="login_script.js" charset="utf-8"></script>
     </body>
 
 

@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: red;
+}
+
+footer {
+    background: green;
+    color: rgb(194, 194, 230);
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    
+    vertical-align: middle;
+    height: 50px;
+    width: 100%;
+
+}
+
+#login {
+    background: blue;
+    color: white;
+    text-align: right;
+}
