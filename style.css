@@ -4,7 +4,7 @@
 }
 
 header {
-    background: red;
+    background: purple;
 }
 
 footer {
@@ -20,8 +20,12 @@ footer {
 
 }
 
-#login {
+#login { 
     background: blue;
     color: white;
     text-align: right;
+}
+
+#nav {
+    color: blue;
 }
