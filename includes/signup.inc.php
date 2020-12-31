@@ -20,12 +20,12 @@ if (isset($_POST["submit"])) { //check that the superglobal variable, which is a
         header("location: ../login.html?error=invalidUid"); 
         exit();
     }
-    echo "now checking if uid already exists";
-    if (uidExists($conn, $uid) !== false) {
-        echo "now redirecting";
-        header("location: ../login.html?error=uidTaken"); 
-        exit();
-    }
+    // echo "now checking if uid already exists";
+    // if (uidExists($conn, $uid) !== false) {
+    //     echo "now redirecting";
+    //     header("location: ../login.html?error=uidTaken"); 
+    //     exit();
+    // }
 
     echo "passed error handling functions";
 
