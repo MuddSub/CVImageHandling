@@ -9,17 +9,18 @@
 
     <body>
         <h2>
-            Sign up
+            Login
         </h2>
         <p>
-            Please sign up with your HMC email so that we can verify your identity. 
+            Please log in with your HMC email to access our image labelling tool. 
 
         </p>
-        <form action="includes/signup.inc.php" method="post">
+        <form action="includes/login.inc.php" method="post">
             <label for="uid">HMC email:</label><br>
             <input type="text" id="uid" name="uid"> @hmc.edu<br>
+            <label for="pwd">Password</label><br>
+            <input type="password" id="pwd" name="pwd"><br>
             <input type="submit" name="submit" value="Submit">
-            <!-- where does the input data get submitted to...? -->
         </form>
 
         <!-- We're going to need a sign up page too, so we know how many accounts we have and can distribute images to. We also probably need a forgot password page... yikes -->
