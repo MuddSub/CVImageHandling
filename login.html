@@ -9,18 +9,16 @@
 
     <body>
         <h2>
-            Login
+            Sign up
         </h2>
         <p>
-            Please log in with your HMC email so that we can verify your identity. 
+            Please sign up with your HMC email so that we can verify your identity. 
 
         </p>
-        <form action="login.inc.php" method="post">  <!-- @Hannah can you explain this line, where do we have login.inc.php -->
+        <form action="includes/signup.inc.php" method="post">
             <label for="uid">HMC email:</label><br>
-            <input type="text" id="uid" name="email"> @hmc.edu<br>
-            <label for="password">Password</label><br>
-            <input type="password" id="password" name="password"><br>
-            <input type="submit" value="Submit">
+            <input type="text" id="uid" name="uid"> @hmc.edu<br>
+            <input type="submit" name="submit" value="Submit">
             <!-- where does the input data get submitted to...? -->
         </form>
 
