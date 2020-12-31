@@ -3,7 +3,8 @@
 
 <html>
     <head>
-        <title>MuddSub Image Labeling</title>
+        <title>Login - MuddSub Image Labeling</title>
+        <link rel="stylesheet" href="style.css">
     </head>
 
     <body>
@@ -11,24 +12,35 @@
             Login
         </h2>
         <p>
-            Please log in with your HMC email so that we can verify your identity. Please use @hmc.edu, not @g.hmc.edu. 
+            Please log in with your HMC email so that we can verify your identity. 
 
         </p>
-        <form action="login.inc.php" method="post">
+        <form action="login.inc.php" method="post">  <!-- @Hannah can you explain this line, where do we have login.inc.php -->
             <label for="uid">HMC email:</label><br>
             <input type="text" id="uid" name="email"> @hmc.edu<br>
+            <label for="password">Password</label><br>
+            <input type="password" id="password" name="password"><br>
             <input type="submit" value="Submit">
             <!-- where does the input data get submitted to...? -->
         </form>
 
+        <!-- We're going to need a sign up page too, so we know how many accounts we have and can distribute images to. We also probably need a forgot password page... yikes -->
+        <p>
+            Need to <a href="signup.html">sign up</a>? <br>
+            Forgot your password? Change it here: [FORGOT PASSWORD PAGE LINK] <br>
+        </p>
+
+
+
         <script src="login_script.js" charset="utf-8"></script>
         <ul id="nav">
-            here is a list of links to the other pages:
-                <li><a href="example.html">example</a></li>
-                <li><a href="login.html">login</a></li>
-                <li><a href="label.php">labeling</a></li>
-                <li><a href="verify.html">verify</a></li>
-                <li><a href="upload.html">image upload</a></li>
+            Navigate to other pages:
+            <li><a href="index.php">homepage</a></li>
+            <li><a href="example.html">example</a></li>
+            <li><a href="signup.html">signup</a></li>
+            <li><a href="label.php">labeling</a></li>
+            <li><a href="verify.html">verify</a></li>
+            <li><a href="upload.html">image upload</a></li>
         </ul>
     </body>
 

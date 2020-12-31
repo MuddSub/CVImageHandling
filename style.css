@@ -20,6 +20,25 @@ footer {
 
 }
 
+a{
+    color: rgb(153, 92, 0);
+}
+
+h2{
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+p{
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+form{
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
 #login { 
     background: blue;
     color: white;
@@ -27,5 +46,9 @@ footer {
 }
 
 #nav {
-    color: blue;
+    background: lightgray;
+    padding: 15px;
+
+    list-style-type: square;
+    list-style-position: inside;
 }

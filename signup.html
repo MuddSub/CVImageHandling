@@ -1,0 +1,44 @@
+<!doctype html>
+
+<head>
+    <title>Sign Up - MuddSub Image Labeling</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2>
+        Sign Up
+    </h2>
+    <p>
+        Please sign up with your HMC email so that we can verify your identity. 
+
+    </p>
+    <form action="login.inc.php" method="post">  <!-- @Hannah can you explain this line, where do we have login.inc.php -->
+        <label for="uid">HMC email:</label><br>
+        <input type="text" id="uid" name="email"> @hmc.edu<br>
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password"><br>
+        <input type="submit" value="Submit">
+        <!-- where does the input data get submitted to...? -->
+    </form>
+
+    <p>
+        Already have an account? <a href="login.html">Log In</a> instead. <br>
+    </p>
+
+
+
+    <script src="login_script.js" charset="utf-8"></script>
+    <ul id="nav">
+        Navigate to other pages:
+        <li><a href="index.php">homepage</a></li>
+        <li><a href="example.html">example</a></li>
+        <li><a href="login.html">login</a></li>
+        <li><a href="label.php">labeling</a></li>
+        <li><a href="verify.html">verify</a></li>
+        <li><a href="upload.html">image upload</a></li>
+    </ul>
+</body>
+
+
+</html>
