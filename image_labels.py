@@ -17,8 +17,8 @@ class image_labels:
         self.box_list = sorted([x.strip('\n') for x in self.box_file.readlines()])
         self.length = len(self.box_list)
         self.DIFFERENCE = 3
-        self.IMGWIDTH = 'help'
-        self.IMGHEIGHT = 'help'
+        self.IMGWIDTH = 640
+        self.IMGHEIGHT = 480
     
     def difference(self, coordinates1, coordinates2):
         """
