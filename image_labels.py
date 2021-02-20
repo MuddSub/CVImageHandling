@@ -39,15 +39,13 @@ class image_labels:
         return True
 
     def coordinates(self, coordslist):
-        """
-        """
         x = float(coordslist[1])
         y = float(coordslist[2])
         w = float(coordslist[3])
         h = float(coordslist[4])
                     
-        topleft = (x - w/2, y + h/2)
-        botright = (x + w/2, y - h/2)
+        topleft = ((x - w/2) * self.IMGWIDTH, (y + h/2) * self.IMGHEIGHT)
+        botright = ((x + w/2) * self.IMGWIDTH, (y - h/2) * self.IMGHEIGHT) 
         coordinates = [topleft, botright]
         return coordinates
 
@@ -82,15 +80,10 @@ class image_labels:
                     
                     result = self.difference(coordinates1, coordinates2)
 
-                    if result == True:
-                        print("All good")
-                        return True
-                    else:
-                        print("hmm we need a third opinion")
+                    if result == False:
                         return False
                 else:
-                    print("we need a third opinion. Class difference in classification ", i)
                     return False
+            return True
         else:
-            print("we need a third opinion. There are different number of objects")
             return False
