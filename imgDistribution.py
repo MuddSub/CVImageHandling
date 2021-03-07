@@ -2,7 +2,6 @@
 # has one folder of images that it splits so everyone has a folder of images
 # nest folders so they're still in the larger folder
 
-
 # importing os module 
 import os, os.path, shutil
 
@@ -66,7 +65,7 @@ def rename_images(pair_names, parent_dir):
 
 def move_images(parent_dir):
     """ creates new folders in the parent_dir and moves images into the folders
-        image names need to be name.number
+        image names need to be name_number
         folder names are name
     """
     images = [f for f in os.listdir(parent_dir) if os.path.isfile(os.path.join(parent_dir, f))]
@@ -82,8 +81,19 @@ def move_images(parent_dir):
         new_image_path = os.path.join(new_path, image)
         shutil.move(old_image_path, new_image_path)
 
+    folders = [folder for folder in os.listdir(parent_dir) if os.path.isdir(os.path.join(parent_dir, folder))]
 
-def main(names_file = 'names.txt', parent_dir = '/home/cvteam1/compData/images/gDriveData'):
+    for folder in folders:
+        name1 = folder.split('-')[0]
+        name2 = folder.split('-')[1]
+        folder_path = os.path.join(parent_dir, folder)
+        name1_path = os.path.join(folder_path, name1)
+        os.makedirs(name1_path)
+        name2_path = os.path.join(folder_path, name2)
+        os.makedirs(name2_path)
+
+
+def main(names_file = 'names.txt', parent_dir = '/home/cvteam1/imageLabeling/compData/'):
     """ Inputs: txt file with peoples' names, directory of images to be sorted (parent_dir should contain only images)
         Gets names from file
         Creates pairs (format: name1-name2) 
