@@ -119,7 +119,8 @@ def verify(labeled_files1, labeled_files2, verified_text_files, basepath, labele
                     print("failed ", file1, " ", file2, file = failed)
                     failed.close()
                     os.replace(basepath + bbox_file1[:-4] + '.jpg', "./compData/admin/" +bbox_file1[:-4]+'.jpg')
-                    shutil.copy(basepath + labelers[1] + "/" + bbox_file2, "./compData/failed_labeler2")
+                    shutil.copy(basepath + labelers[1] + "/" + bbox_file2, "./compData/failed_labeler2/" + bbox_file2)
+                    shutil.copy(basepath + labelers[0] + "/" + bbox_file1, "./compData/failed_labeler1/" + bbox_file1)
                 verified_text_files.append(bbox_file1)
 
 def start_verifying(basepath, verified_text_files=[]):
@@ -154,4 +155,8 @@ if __name__ == "__main__":
         os.makedirs("./output/image")
     if not os.path.exists("./output/labels/"):
         os.makedirs("./output/labels/")
+    if not os.path.exists("./compData/failed_labeler1/"):
+        os.makedirs("./compData/failed_labeler1/")
+    if not os.path.exists("./compData/failed_labeler2/"):
+        os.makedirs("./compData/failed_labeler2/")
     start_verifying(basepath, verified_text_files)
