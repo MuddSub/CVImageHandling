@@ -11,7 +11,6 @@ Written by: Eric, Rosy, Francine
 '''
 import os
 import time
-import shutil
 from averageText import *
 from count import *
 class image_labels:
@@ -119,7 +118,6 @@ def verify(labeled_files1, labeled_files2, verified_text_files, basepath, labele
                     print("failed ", file1, " ", file2, file = failed)
                     failed.close()
                     os.replace(basepath + bbox_file1[:-4] + '.jpg', "./compData/admin/" +bbox_file1[:-4]+'.jpg')
-                    shutil.copy(basepath + labelers[1] + "/" + bbox_file2, "./compData/failed_labeler2")
                 verified_text_files.append(bbox_file1)
 
 def start_verifying(basepath, verified_text_files=[]):
@@ -144,14 +142,3 @@ def start_verifying(basepath, verified_text_files=[]):
                         verify(labeled_files1, labeled_files2, verified_text_files, new_basepath, labelers)
                     else:
                         verify(labeled_files2, labeled_files1, verified_text_files, new_basepath, labelers)
-
-if __name__ == "__main__":
-    verified_text_files = []
-    basepath = "./compData/"
-    if not os.path.exists("./output/"):
-        os.makedirs("./output/")
-    if not os.path.exists("./output/images/"):
-        os.makedirs("./output/image")
-    if not os.path.exists("./output/labels/"):
-        os.makedirs("./output/labels/")
-    start_verifying(basepath, verified_text_files)
