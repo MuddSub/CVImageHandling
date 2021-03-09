@@ -3,5 +3,5 @@ buoys
 gate
 path marker
 torpedo board
-Thimo
-www
+torpedo target
+gripper object

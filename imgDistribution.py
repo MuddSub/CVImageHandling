@@ -59,9 +59,7 @@ def rename_images(pair_names, parent_dir):
         whichPair = x % numPairs
         os.rename(parent_dir +'/'+ images[x], parent_dir + '/' + pair_names[whichPair] + '_' + str(x) + '.jpg')
     return images
-
-
-
+    
 
 def move_images(parent_dir):
     """ creates new folders in the parent_dir and moves images into the folders
@@ -105,6 +103,51 @@ def main(names_file = 'names.txt', parent_dir = '/home/cvteam1/imageLabeling/com
     pairs = pair_people(names)
     rename_images(pairs, parent_dir)
     move_images(parent_dir)
+
+def admin_rename_images(names, parent_dir):
+    """
+    Inputs: a list of names and a directory with images
+    Outputs: the same directory, but with renamed images
+    rename_images cycles through the images stored in the directory and 
+    assigns them evenly among the provided names, using the naming convention
+    "admin_name'name1-name2_#.jpg"
+    """
+    images = os.listdir(parent_dir)
+    if '.DS_Store' in images:
+        images.remove('.DS_Store')
+    numNames = len(names)
+    for x in range(len(images)):
+        whichName = x % numNames
+        os.rename(parent_dir +'/'+ images[x], parent_dir + '/' + names[whichName] + "'" + images[x])
+    return images
+
+def admin_move_images(parent_dir):
+    """ creates new folders in the parent_dir and moves images into the folders
+    """
+    images = [f for f in os.listdir(parent_dir) if os.path.isfile(os.path.join(parent_dir, f))]
+
+    for image in images:
+        folder_name = image.split("'")[0]
+
+        new_path = os.path.join(parent_dir, folder_name)
+        if not os.path.exists(new_path):
+            os.makedirs(new_path)
+
+        old_image_path = os.path.join(parent_dir, image)
+        new_image_path = os.path.join(new_path, image)
+        shutil.move(old_image_path, new_image_path)
+
+    folders = [folder for folder in os.listdir(parent_dir) if os.path.isdir(os.path.join(parent_dir, folder))]
+
+    for folder in folders:
+        folder_path = os.path.join(parent_dir, folder)
+        text_path = os.path.join(folder_path, folder)
+        os.makedirs(text_path) 
     
-
-
+def admin_distribution(admin_file = 'admin_names.txt', parent_dir = '/home/cvteam1/imageLabeling/compData/admin/'):
+    """
+    distributes images within the admin folder
+    """
+    admin_names = get_names(admin_file)
+    admin_rename_images(admin_names, parent_dir)
+    admin_move_images(parent_dir)
