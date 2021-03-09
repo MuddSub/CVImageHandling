@@ -9,7 +9,10 @@ Check that bounding box pixel values are less than 3 pixels apart
 
 Written by: Eric, Rosy, Francine
 '''
-
+import os
+import time
+from averageText import *
+from count import *
 class image_labels:
     def __init__(self, file_name):
         self.file_name = file_name
@@ -72,7 +75,10 @@ class image_labels:
                 i2list = image2.box_list[i].split(" ")
                 
                 if i1list[0] == i2list[0]: #check if the classes are the same first
-                    
+                    if(i1list == '' and i2list == ''):
+                        return True
+                    elif(i1list == '' and i2list != '') or (i2list == '' and i1list != ''):
+                        return False
                     coordinates1 = self.coordinates(i1list)
                     coordinates2 = self.coordinates(i2list)
                     print("coordinates1: ", coordinates1)
@@ -87,3 +93,63 @@ class image_labels:
             return True
         else:
             return False
+
+def verify(labeled_files1, labeled_files2, verified_text_files, basepath, labelers):
+    for bbox_file2 in labeled_files2:
+        if bbox_file2 in verified_text_files:
+            continue
+        for bbox_file1 in labeled_files1:
+            if bbox_file2 == bbox_file1:
+                file2 = basepath + labelers[1] + "/" + bbox_file2
+                file1 = basepath + labelers[0] + "/" + bbox_file1
+                print("file being checked rn is: ", file2)
+                box2 = image_labels(file2)
+                box1 = image_labels(file1)
+                if box1.verify_labels(box2) == True:
+                    print("passed verification")
+                    passed = open("passed_verification.txt", "a")
+                    print("passed ", file1, " ", file2, file = passed)
+                    passed.close()
+                    average_files(file1, file2, "./output/labels/")
+                    os.replace(basepath + bbox_file1[:-4] + '.jpg', "./output/images/" +bbox_file1[:-4]+'.jpg')
+                else:
+                    print("failed verification")
+                    failed = open("failed_verification.txt", "a")
+                    print("failed ", file1, " ", file2, file = failed)
+                    failed.close()
+                    os.replace(basepath + bbox_file1[:-4] + '.jpg', "./compData/admin/" +bbox_file1[:-4]+'.jpg')
+                verified_text_files.append(bbox_file1)
+
+def start_verifying(basepath, verified_text_files=[]):
+    print('Verification started')
+    print('Basepath is ', basepath)
+    group_names = [name for name in os.listdir(basepath) if os.path.isdir(os.path.join(basepath, name))]
+    if('admin' in group_names):
+        group_names.remove('admin')
+    else:
+        os.makedirs(basepath + "admin/")
+    while(True):
+        time.sleep(10)
+        for group in group_names:
+            print("curently checking", group)
+            new_basepath = basepath +group+"/"
+            labelers = [ name for name in os.listdir(new_basepath) if os.path.isdir(os.path.join(new_basepath, name))]
+            if(len(labelers) == 2):
+                labeled_files1 = os.listdir(new_basepath + labelers[0]+"/")
+                labeled_files2 = os.listdir(new_basepath + labelers[1]+"/")
+                if(len(labeled_files1)>0 and len(labeled_files2)>0):
+                    if(len(labeled_files1)<=len(labeled_files2)):
+                        verify(labeled_files1, labeled_files2, verified_text_files, new_basepath, labelers)
+                    else:
+                        verify(labeled_files2, labeled_files1, verified_text_files, new_basepath, labelers)
+
+if __name__ == "__main__":
+    verified_text_files = []
+    basepath = "./compData/"
+    if not os.path.exists("./output/"):
+        os.makedirs("./output/")
+    if not os.path.exists("./output/images/"):
+        os.makedirs("./output/image")
+    if not os.path.exists("./output/labels/"):
+        os.makedirs("./output/labels/")
+    start_verifying(basepath, verified_text_files)

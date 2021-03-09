@@ -3,3 +3,5 @@ buoys
 gate
 path marker
 torpedo board
+Thimo
+www
