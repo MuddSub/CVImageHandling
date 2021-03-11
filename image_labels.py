@@ -20,7 +20,7 @@ class image_labels:
         self.box_file = open(file_name, "r")
         self.box_list = sorted([x.strip('\n') for x in self.box_file.readlines()])
         self.length = len(self.box_list)
-        self.DIFFERENCE = 3
+        self.DIFFERENCE = 6
         self.IMGWIDTH = 640
         self.IMGHEIGHT = 480
     
@@ -122,6 +122,9 @@ def verify(labeled_files1, labeled_files2, verified_text_files, basepath, labele
                     shutil.copy(basepath + labelers[1] + "/" + bbox_file2, "./compData/failed_labeler2/" + bbox_file2)
                     shutil.copy(basepath + labelers[0] + "/" + bbox_file1, "./compData/failed_labeler1/" + bbox_file1)
                 verified_text_files.append(bbox_file1)
+                verification_records = open('./verified_text_files.txt', 'a')
+                print(bbox_file1, file = verification_records)
+                verification_records.close()
 
 def start_verifying(basepath, verified_text_files=[]):
     print('Verification started')
@@ -131,7 +134,12 @@ def start_verifying(basepath, verified_text_files=[]):
         group_names.remove('admin')
     else:
         os.makedirs(basepath + "admin/")
-    while(True):
+    if('failed_labeler1' in group_names):
+        group_names.remove('failed_labeler1')
+    if('failed_labeler2' in group_names):
+        group_names.remove('failed_labeler2')
+    total_images = count("./compData/", "jpg")
+    while(len(verified_text_files)< total_images + 1):
         time.sleep(10)
         for group in group_names:
             print("curently checking", group)
@@ -147,12 +155,18 @@ def start_verifying(basepath, verified_text_files=[]):
                         verify(labeled_files2, labeled_files1, verified_text_files, new_basepath, labelers)
 
 if __name__ == "__main__":
-    verified_text_files = []
+    if (os.path.exists("./verified_text_files.txt")):
+        verification_records = open('./verified_text_files.txt', 'r')
+        verified_text_files = verification_records.readlines()
+        verified_text_files = [x.strip("\n") for x in verified_text_files]
+        verified_text_files.apend('bookmark.txt')
+    else:
+        verified_text_files = ['bookmark.txt']
     basepath = "./compData/"
     if not os.path.exists("./output/"):
         os.makedirs("./output/")
     if not os.path.exists("./output/images/"):
-        os.makedirs("./output/image")
+        os.makedirs("./output/images")
     if not os.path.exists("./output/labels/"):
         os.makedirs("./output/labels/")
     if not os.path.exists("./compData/failed_labeler1/"):
