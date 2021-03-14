@@ -58,8 +58,8 @@ def admin_verify(verified_text_files):
 
 if __name__ == "__main__":
     verified_text_files = []
-    if (os.path.exists("./verified_text_files.txt")):
-        verification_records = open('./verified_text_files.txt', 'r')
+    if (os.path.exists("./admin_verified_text_files.txt")):
+        verification_records = open('./admin_verified_text_files.txt', 'r')
         verified_text_files = verification_records.readlines()
         verified_text_files = [x.strip("\n") for x in verified_text_files]
         verified_text_files.apend('bookmark.txt')
