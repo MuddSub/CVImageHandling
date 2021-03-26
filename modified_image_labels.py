@@ -6,15 +6,14 @@ import time
 import shutil
 from averageText import *
 from count import *
-class image_labels:
-    """
-        creates an image_labels object.
-        each image_labels object represents the contents of one bounding box text file, which corresponds to one picture
-    """
+from sortList import *
+class image_labels_m:
     def __init__(self, file_name):
         self.file_name = file_name
         self.box_file = open(file_name, "r")
         self.box_list = sorted([x.strip('\n') for x in self.box_file.readlines()])
+        self.box_list = sortList(self.box_list)
+        print(self.box_list)
         self.length = len(self.box_list)
         self.DIFFERENCE = 6
         self.IMGWIDTH = 640
@@ -53,11 +52,10 @@ class image_labels:
         """
         | Check if the number of boxes in the images equal, if so continue to verify if the difference 
         | between the coordinates are smaller than 6.
-        |
-        | Does care if the classes are labeled correctly.
+        | Does not care if classes match. only cares about location of the bounding boxes.
         |
         | Input:   self
-        |          image2: another instance of the image_labels class
+        |          image2: another instance of the image_labels_m class
         | Output:  If the number of boxes are the same and the coordinate differences is smaller than 6, return True; 
         |          If not, return False
         """
@@ -73,36 +71,37 @@ class image_labels:
                 i1list = self.box_list[i].split(" ")
                 i2list = image2.box_list[i].split(" ")
                 
-                if i1list[0] == i2list[0]: #check if the classes are the same first
-                    if(i1list == '' and i2list == ''):
-                        return True
-                    elif(i1list == '' and i2list != '') or (i2list == '' and i1list != ''):
-                        return False
-                    coordinates1 = self.coordinates(i1list)
-                    coordinates2 = self.coordinates(i2list)
-                    print("coordinates1: ", coordinates1)
-                    print("coordinates2: ", coordinates2)
-                    
-                    result = self.difference(coordinates1, coordinates2)
+                #doesn't check if the classes are the same first
+                if(i1list == '' and i2list == ''):
+                    return True
+                elif(i1list == '' and i2list != '') or (i2list == '' and i1list != ''):
+                    return False
+                coordinates1 = self.coordinates(i1list)
+                coordinates2 = self.coordinates(i2list)
+                print(i1list[0] , "coordinates1: ", coordinates1)
+                print(i2list[0], "coordinates2: ", coordinates2)
+                
+                result = self.difference(coordinates1, coordinates2)
 
-                    if result == False:
-                        return False
-                else:
+                if result == False:
+                    print("result false")
                     return False
             return True
         else:
+            print("other false")
             return False
 
-#
 def verify(labeled_files1, labeled_files2, verified_text_files, basepath, labelers):
     """
         compares matching text files from two directories, each represented by one labeled_files
-        if two matching text files pass verification, the average of their text files will go to ./output/labels/
-                                                    the image they are associated will be copied to ./output/images/
+        this is the more lenient version that does not care about class names, just location
+
+        if two matching text files pass verification, the average of their text files will go to ./output_m/labels/
+                                                    the image they are associated will be copied to ./output_m/images/
         if two matching text files fail verification, one text file will be copied to ./compData/failed_labeler1 and the other will be copied to ./compData/failed_labeler2
                                                     the image they are associated with will be copied to ./compData/admin
-                                                    the image they are associated with will go to ./output/images/
-                                                    a record of the two file names will be added to failed_verification.txt
+                                                    the image they are associated with will go to ./output_m/images/
+                                                    a record of the two file names will be added to failed_verification_m.txt
 
         inputs:
             labeled_files1: a list containing the all the text file names of one labeler, like the contents of ./compData/erchen-halu/erchen/
@@ -119,25 +118,25 @@ def verify(labeled_files1, labeled_files2, verified_text_files, basepath, labele
                 file2 = basepath + labelers[1] + "/" + bbox_file2
                 file1 = basepath + labelers[0] + "/" + bbox_file1
                 print("file being checked rn is: ", file2)
-                box2 = image_labels(file2)
-                box1 = image_labels(file1)
+                box2 = image_labels_m(file2)
+                box1 = image_labels_m(file1)
                 if box1.verify_labels(box2) == True:
                     print("passed verification")
-                    passed = open("passed_verification.txt", "a")
+                    passed = open("passed_verification_m.txt", "a")
                     print("passed ", file1, " ", file2, file = passed)
                     passed.close()
-                    average_files(file1, file2, "./output/labels/")
-                    shutil.copy(basepath + bbox_file1[:-4] + '.jpg', "./output/images/" +bbox_file1[:-4]+'.jpg')
+                    average_files(file1, file2, "./output_m/labels/")
+                    shutil.copy(basepath + bbox_file1[:-4] + '.jpg', "./output_m/images/" +bbox_file1[:-4]+'.jpg')
                 else:
                     print("failed verification")
-                    failed = open("failed_verification.txt", "a")
+                    failed = open("failed_verification_m.txt", "a")
                     print("failed ", file1, " ", file2, file = failed)
                     failed.close()
                     shutil.copy(basepath + bbox_file1[:-4] + '.jpg', "./compData/admin/" +bbox_file1[:-4]+'.jpg')
                     shutil.copy(basepath + labelers[1] + "/" + bbox_file2, "./compData/failed_labeler2/" + bbox_file2)
                     shutil.copy(basepath + labelers[0] + "/" + bbox_file1, "./compData/failed_labeler1/" + bbox_file1)
                 verified_text_files.append(bbox_file1)
-                verification_records = open('./verified_text_files.txt', 'a')
+                verification_records = open('./verified_text_files_m.txt', 'a')
                 print(bbox_file1, file = verification_records)
                 verification_records.close()
 
@@ -152,7 +151,7 @@ def start_verifying(basepath, verified_text_files=[]):
         input: 
             basepath: the directory that contains all labeler pairs, generally speaking will be ./compData
             verified_text_files: a list of all previously verified text file names so we don't repeat
-                                    this list is obtained from verified_text_files.txt
+                                    this list is obtained from verified_text_files_m.txt
     """
     print('Verification started')
     print('Basepath is ', basepath)
@@ -165,7 +164,7 @@ def start_verifying(basepath, verified_text_files=[]):
         group_names.remove('failed_labeler1')
     if('failed_labeler2' in group_names):
         group_names.remove('failed_labeler2')
-    total_images = count("./compData/", "jpg")
+    total_images = count("./compData/", "jpg") #this will double count same images if there are already images in the admin folder when you run this file
     while(len(verified_text_files)< total_images + 1):
         time.sleep(10)
         for group in group_names:
@@ -182,20 +181,20 @@ def start_verifying(basepath, verified_text_files=[]):
                         verify(labeled_files2, labeled_files1, verified_text_files, new_basepath, labelers)
 
 if __name__ == "__main__":
-    if (os.path.exists("./verified_text_files.txt")):
-        verification_records = open('./verified_text_files.txt', 'r')
+    if (os.path.exists("./verified_text_files_m.txt")):
+        verification_records = open('./verified_text_files_m.txt', 'r')
         verified_text_files = verification_records.readlines()
         verified_text_files = [x.strip("\n") for x in verified_text_files]
         verified_text_files.apend('bookmark.txt')
     else:
         verified_text_files = ['bookmark.txt']
     basepath = "./compData/"
-    if not os.path.exists("./output/"):
-        os.makedirs("./output/")
-    if not os.path.exists("./output/images/"):
-        os.makedirs("./output/images")
-    if not os.path.exists("./output/labels/"):
-        os.makedirs("./output/labels/")
+    if not os.path.exists("./output_m/"):
+        os.makedirs("./output_m/")
+    if not os.path.exists("./output_m/images/"):
+        os.makedirs("./output_m/images")
+    if not os.path.exists("./output_m/labels/"):
+        os.makedirs("./output_m/labels/")
     if not os.path.exists("./compData/failed_labeler1/"):
         os.makedirs("./compData/failed_labeler1/")
     if not os.path.exists("./compData/failed_labeler2/"):
